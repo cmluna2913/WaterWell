@@ -123,3 +123,8 @@ large amount of unique installers, many of which have only built one well.
 I want to find a better way to categorize them and perhaps avoid using *other* 
 since that may become the majority class after combining them all. I would also 
 like to continue to hyperparameter tune to get a better estimator for my model.
+
+At this point in time, I have learned how to create and use neural networks. I will
+be incorporating neural networks into this project to see the comparison between them
+and previous methods that I have used. I will create another notebook that will
+contain the steps I took towards incorporating neural networks.
