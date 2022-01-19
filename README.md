@@ -113,18 +113,15 @@ wells in Tanzania.
 # *I got about a .41 f1-score in my submission. There is room for a lot of improvement*
 
 # Next Steps
-I want to continue editing the dataframe and which columns are considered. I
-would love to engineer where possible. A feature with longitude and latitude
-would be my first choice, most likely creating a center point on the map and 
-seeing how the distance from this point impacts the prediction of the well's 
-condition. I also want to take a better look at some of the features and find a 
-better way to categorize the values. For example, the *installer* feature has a 
-large amount of unique installers, many of which have only built one well. 
-I want to find a better way to categorize them and perhaps avoid using *other* 
-since that may become the majority class after combining them all. I would also 
-like to continue to hyperparameter tune to get a better estimator for my model.
+There are several items on my list for improving this project. The first is to 
+split the original water_well_work.ipynb notebook into several notebooks and 
+source files. This is to split the process into its various components and 
+streamline the process into something that would most likely represent an
+actual work setting. I will tackle this first to give the structure of this
+project new life and to refamilarize myself with the work I had previously done.
 
-At this point in time, I have learned how to create and use neural networks. I will
-be incorporating neural networks into this project to see the comparison between them
-and previous methods that I have used. I will create another notebook that will
-contain the steps I took towards incorporating neural networks.
+After that, I will improve on my data cleaning process to have a more robust 
+dataset that may also include newly engineered features. I will then test
+different types of machine learning models, including those that I have
+learned about since the last time I worked on this project. By the end of my
+changes, this repo will look completely different.
