@@ -131,8 +131,8 @@ changes, this repo will look completely different.
 
 # Environment
 I am running Python 3.10.4 in a conda environment named "updated". 
-I created an environment.yml file for anyone to recreate the environment should
-they choose to. <br>
+I created an environment.yml file for anyone looking to recreate the 
+environment should they choose to. <br>
 If you were curious on how I exported the environment, I simply did the following:
 ```
 conda activate updated
