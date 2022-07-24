@@ -1,25 +1,20 @@
+# This branch is for making edits
+
+---
+
 # Water Wells in Tanzania
 ![Map of Area](./Images/map.png)
 
-We are predicting Tanzanian Water Wells into three classifications:
+Given a set of data, I need to predict the functionality of pumps into three 
+specific classifications:
 1. Functional
 2. Non-Functional
 3. Functional, Needs Repair
 
-I will be going through a variety of models using the data I was provided and
-try to choose the best model out of all of them. I want to submit my predictions
-to the competition 
-<a href='https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/'>
-    here
-</a>. I will be editing and updating my models when possible in order to get the
-best score I possibly can. The information we gain from our predictions will
-help with resource management and maintenance so that the people in Tanzania
-have access to clean water when they need it.
-
 # Data
 The data provided is from Taarifa and the Tanzanian Ministry of Water. There are
 a few things to note about the data.
-* 59,400 entries with 40 entries.
+* 59,400 entries with 40 columns
 * The classification for each entry is in a separate csv.
 * There are potentially a lot of null values depending on the column we consider.
 * Some of the columns provide the same or very similar information.
@@ -30,6 +25,11 @@ a few things to note about the data.
 There is a significant amount of cleaning we need to do. We will also have to
 consider which columns to keep depending on the information provided and if
 other columns provide the same or similar information.
+
+You can read more about the 
+<a href='https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/'>
+challenge here.
+</a>
 
 # Approach
 After cleaning and encoding categorical variables, I will begin building models.
@@ -110,7 +110,10 @@ This gives us the top 5 well installers in Tanzania and the percentege of wells
 they made. The Department of Water Engineer(DWE) have made almost 60% of all the
 wells in Tanzania.
 
-# *I got about a .41 f1-score in my submission. There is room for a lot of improvement*
+# Results
+I managed to get an f1-score of 0.4191. According to the scoreboard, this ranks 
+me as 4965 out of 13541. While the initial score was good, this still shows that 
+there is a lot of room for improvement.
 
 # Next Steps
 There are several items on my list for improving this project. The first is to 
@@ -125,3 +128,19 @@ dataset that may also include newly engineered features. I will then test
 different types of machine learning models, including those that I have
 learned about since the last time I worked on this project. By the end of my
 changes, this repo will look completely different.
+
+# Environment
+I am running Python 3.10.4 in a conda environment named "updated". 
+I created an environment.yml file for anyone looking to recreate the 
+environment should they choose to. <br>
+If you were curious on how I exported the environment, I simply did the following:
+```
+conda activate updated
+conda env export > environment.yml
+```
+If you want to create an environment based on the environment.yml file, do the following:
+
+```
+conda env create -f environment.yml
+```
+</br>
