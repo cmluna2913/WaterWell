@@ -1,4 +1,4 @@
-# Needs to be updated for updates processes
+# Needs to be updated for updates processes and results
 ---
 # Water Wells in Tanzania
 ![Map of Area](./Images/map.png)
@@ -44,6 +44,8 @@ There is a class imbalance in the dataset. It would be best practice to account
 for the imbalance to try to improve the model.
 ![Class Balance](./Images/class_size.png)
 
+---
+
 # Walkthrough
 * *config.ini* and *config_example.ini* <br><t>
 I am getting into the habit of creating a configuration file, *config.ini*. 
@@ -79,6 +81,8 @@ conda env export > environment.yml
 conda env create -f environment.yml
 ```
 </t></br>
+
+---
 
 # Current Conclusion
 Currently my best performing model in this competition is a Random Forest Classifier.
@@ -119,6 +123,8 @@ Here are the top 10 features my model is using to make classifications.
 
 ![Feature Importances](./Images/importances.png)
 
+---
+
 # Exploratory Data Analysis
 Here I explore some of the features my model uses to predict our classifications.
 
@@ -144,6 +150,8 @@ This gives us the top 5 well installers in Tanzania and the percentege of wells
 they made. The Department of Water Engineer(DWE) have made almost 60% of all the
 wells in Tanzania.
 
+---
+
 # Results
 
 ## Update (7/25/22)
@@ -158,6 +166,8 @@ I managed to get an f1-score of 0.4191. According to the scoreboard, this ranks
 me as 4965 out of 13541. While the initial score was good, this still shows that 
 there is a lot of room for improvement.
 
+---
+
 # Next Steps
 There are several items on my list for improving this project. The first is to 
 split the original water_well_work.ipynb notebook into several notebooks and 
@@ -171,7 +181,3 @@ dataset that may also include newly engineered features. I will then test
 different types of machine learning models, including those that I have
 learned about since the last time I worked on this project. By the end of my
 changes, this repo will look completely different.
-
-# Environment
-
-</br>
