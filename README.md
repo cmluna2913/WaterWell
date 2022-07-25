@@ -1,7 +1,3 @@
-# This branch is for making edits
-
----
-
 # Water Wells in Tanzania
 ![Map of Area](./Images/map.png)
 
@@ -111,6 +107,15 @@ they made. The Department of Water Engineer(DWE) have made almost 60% of all the
 wells in Tanzania.
 
 # Results
+
+## Update
+With my updated processes (7/25/22), I got a classification rate of .8015. This 
+puts me at a rank of 3429 out of 13881. This is a drastic improvement from my
+prior score of 0.4191. The changes I made came from work experience and additional
+methodologies I found in search of improving my skills. I hope I can continue to
+make improvements and get a better score.
+
+## Old
 I managed to get an f1-score of 0.4191. According to the scoreboard, this ranks 
 me as 4965 out of 13541. While the initial score was good, this still shows that 
 there is a lot of room for improvement.
