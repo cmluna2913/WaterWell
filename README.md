@@ -1,63 +1,101 @@
+# Needs to be updated for updates processes
+---
 # Water Wells in Tanzania
 ![Map of Area](./Images/map.png)
 
-Given a set of data, I need to predict the functionality of pumps into three 
+## Problem Summary
+Given a set of data, I need to predict the functionality of water pumps into three 
 specific classifications:
 1. Functional
 2. Non-Functional
 3. Functional, Needs Repair
-
-# Data
-The data provided is from Taarifa and the Tanzanian Ministry of Water. There are
-a few things to note about the data.
-* 59,400 entries with 40 columns
-* The classification for each entry is in a separate csv.
-* There are potentially a lot of null values depending on the column we consider.
-* Some of the columns provide the same or very similar information.
-* After going through the test values for our submission, some of the categorical
-  values are not the same and I will have to factor this in at a later point when
-  editing.
-
-There is a significant amount of cleaning we need to do. We will also have to
-consider which columns to keep depending on the information provided and if
-other columns provide the same or similar information.
 
 You can read more about the 
 <a href='https://www.drivendata.org/competitions/7/pump-it-up-data-mining-the-water-table/'>
 challenge here.
 </a>
 
+---
+
+# Data
+The data provided is from Taarifa and the Tanzanian Ministry of Water. There are
+a few things to note about the data.
+* Training data includes 59,400 entries with 40 columns
+* There are null values depending on the column we consider
+* Column dtypes are not all well-optimized
+* Some of the columns provide the same or very similar information
+* Testing data includes 14,850 entires with 40 columns
+
+There is a significant amount of cleaning to perform on my datasets. I will also
+have to figure out which columns to keep depending on several factors, such as
+correlation and importance.
+
+---
+
 # Approach
-After cleaning and encoding categorical variables, I will begin building models.
-I will make a train-test-split once for cross validation. Then, on my training
-set, I will perform another train-test-split. This is so I can try to minimize
-any influence our test set would have on our model.
-I will make the following models and ensemble methods:
-* K-Nearest Neighbors
-* Naive Bayes
-* Random Forest
-* Bagging
-* Extra Trees
-* XG Boost
+I will break down my approach into several key steps:
+1) Import data and cast to appropriate dtypes
+2) Handle null values and other general cleaning steps
+3) Create a quick model to find feature importance
+4) Decide columns to keep and finish cleaning processes
+5) Build several models and choose the best performing model
 
-I will also use SMOTE to help with balancing classes since there is a huge
-imbalance with wells that are classified as needing repair. I will also run
-a grid search to hyperparameter tune.
-
+There is a class imbalance in the dataset. It would be best practice to account
+for the imbalance to try to improve the model.
 ![Class Balance](./Images/class_size.png)
 
+# Walkthrough
+* *config.ini* and *config_example.ini* <br><t>
+I am getting into the habit of creating a configuration file, *config.ini*. 
+This file allows me to edit my paths in once location. Now I'll save myself a
+headache from updating paths in every single file. This configuration file can 
+even be used for other purposes, such as saving usernames and passwords. I can 
+even add it to the *.gitignore* to protect private information.
+</t></br>
+
+* */Notebooks/* <br><t>
+There are several jupyter notebooks in this directory. These notebooks house the
+code I used for all my processes, from data cleaning to model building. I will
+include comments and any additional notes not mentioned in the *README.md*.
+</t></br>
+
+* */src/*<br><t>
+There are several *.py* files in this directory. These *.py* files are essentially
+the same as my notebooks. They are just truncated versions that only contain the
+code necessary to perform all the cleaning and model building steps. This will be
+created last. 
+</t></br>
+
+* *environment.yml* <br><t>
+I am running Python 3.10.4 in a conda environment named "updated". 
+This will let you view and/or recreate the environment I used on this project.
+Run the following lines of code based on your needs:
+```python
+# To export the environment
+conda activate updated
+conda env export > environment.yml
+
+# To recreate the environment using a .yml file
+conda env create -f environment.yml
+```
+</t></br>
+
 # Current Conclusion
-My *best* model appears to be a Random Forest Model after using SMOTE to balance
-classes equaly. Here are the current metrics and confusion matrix. My confusion 
-matrix includes the precision of our predicted values. A quick breakdown:
-* Precision:
-  Ratio of our correct guesses to the total guesses for that category.
-* Recall:
-  Ratio of our correct guesses to the total actual values for that category.
-* f1-Score:
-  Balance between our precision and recall, and gives a better measure
-  of how our model is doing. The closer it is to 1, the better our model does 
-  for predicting that classification.
+Currently my best performing model in this competition is a Random Forest Classifier.
+
+A quick breakdown on the metrics used:
+* Precision: <br><t>
+  Ratio of positive predictions to the total predictions for that category. This tells me how many total predictions were correct.
+  </br></t>
+* Recall: <br><t>
+  Ratio of correct guesses to the total *actual* values for that category. This
+  tells me if I am correctly predicting each category.
+  </br></t>
+* F1-Score: <br><t>
+  A balance between precision and recall. This gives a better indication of
+  general model performance. This tells me my model is making many correct predictions
+  *and* correctly predicting classes.
+  </br></t>
   
 For a more in depth explanation of these metrics, go 
 <a href='https://blog.exsilio.com/all/accuracy-precision-recall-f1-score-interpretation-of-performance-measures/'>
@@ -135,17 +173,5 @@ learned about since the last time I worked on this project. By the end of my
 changes, this repo will look completely different.
 
 # Environment
-I am running Python 3.10.4 in a conda environment named "updated". 
-I created an environment.yml file for anyone looking to recreate the 
-environment should they choose to. <br>
-If you were curious on how I exported the environment, I simply did the following:
-```
-conda activate updated
-conda env export > environment.yml
-```
-If you want to create an environment based on the environment.yml file, do the following:
 
-```
-conda env create -f environment.yml
-```
 </br>
