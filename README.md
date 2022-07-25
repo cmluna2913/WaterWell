@@ -108,8 +108,8 @@ wells in Tanzania.
 
 # Results
 
-## Update
-With my updated processes (7/25/22), I got a classification rate of .8015. This 
+## Update (7/25/22)
+With my updated processes, I got a classification rate of .8015. This 
 puts me at a rank of 3429 out of 13881. This is a drastic improvement from my
 prior score of 0.4191. The changes I made came from work experience and additional
 methodologies I found in search of improving my skills. I hope I can continue to
