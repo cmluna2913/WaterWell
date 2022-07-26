@@ -1,9 +1,5 @@
 import configparser
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.metrics import plot_confusion_matrix
 from sklearn.preprocessing import OneHotEncoder
 import datetime as dt
 
@@ -12,54 +8,10 @@ config.read("../src/config.ini")
 
 output = config['paths']['data_path']
 
-train_lbls = pd.read_csv(config['paths']['train_labels'])
-train_df = pd.read_csv(config['paths']['train_data'])
-test_df = pd.read_csv(config['paths']['test_data'])
-sub_form = pd.read_csv(config['paths']['sub_form'])
-
-def get_cleaned_sets(trn_df_path, trn_lbls_path, tst_df_path, sub_form_path):
-    dtype_dict = {'amount_tsh': 'float32',
-                'funder': 'category',
-                'gps_height': 'int16',
-                'installer': 'category',
-                'longitude': 'float16',
-                'latitude': 'float16',
-                'wpt_name': 'category',
-                'num_private': 'int16',
-                'basin': 'category',
-                'subvillage': 'category',
-                'region': 'category',
-                'region_code': 'int8',
-                'district_code': 'int8',
-                'lga': 'category',
-                'ward': 'category',
-                'population': 'int16',
-                'recorded_by': 'category',
-                'scheme_management': 'category',
-                'construction_year': 'int16',
-                'extraction_type': 'category',
-                'extraction_type_group': 'category',
-                'extraction_type_class': 'category',
-                'management': 'category',
-                'management_group': 'category',
-                'payment': 'category',
-                'payment_type': 'category',
-                'water_quality': 'category',
-                'quality_group': 'category',
-                'quantity': 'category',
-                'quantity_group': 'category',
-                'source': 'category',
-                'source_type': 'category',
-                'source_class': 'category',
-                'waterpoint_type': 'category',
-                'waterpoint_type_group': 'category'}
-    
-    train_df = pd.read_csv(trn_df_path)
-    train_lbls = pd.read_csv(trn_lbls_path)
-    test_df = pd.read_csv(tst_df_path)
-    sub_form = pd.read_csv(sub_form_path)
-
-    lower_features(df_final, test_df)
+trn_lbls_path = config['paths']['train_labels']
+trn_df_path = config['paths']['train_data']
+tst_df_path = config['paths']['test_data']
+sub_form_path = config['paths']['sub_form']
 
 def simple_clean(df):
     df.index = df['id']
@@ -76,7 +28,7 @@ def simple_clean(df):
                'recorded_by']
     df.drop(columns=to_drop, inplace=True)
 
-def add_categories(df)
+def add_categories(df):
     for col in ['funder', 'installer', 'subvillage', 'scheme_management']:
         if col=='scheme_management':
             df[col] = df[col].cat.add_categories('Unknown')
@@ -92,46 +44,93 @@ def fill_nulls(df):
                 'permit': False}
                 , inplace=True)
 
-def encode_me(train_df, test_df, n=20):
-    cats = df.select_dtypes(include='category')
-    nums = df.select_dtypes(exclude='category')
-    lower_features(train_df, test_df)
+def encode_me(train_df, test_df):
+    trn_cats = train_df.select_dtypes(include='category')
+    trn_nums = train_df.select_dtypes(exclude='category')
+    tst_cats = test_df.select_dtypes(include='category')
+    tst_nums = test_df.select_dtypes(exclude='category')
 
-def lower_features(train_df, test_df):
+    trn_cats, tst_cats = ohe_me(trn_cats, tst_cats)
+
+    train_df = trn_nums.merge(trn_cats, left_index=True, right_index=True, how='inner')
+    test_df = tst_nums.merge(tst_cats, left_index=True, right_index=True, how='inner')
+
+    return train_df, test_df
+
+def ohe_me(trn_cats, tst_cats):
+    ohe = OneHotEncoder(handle_unknown='ignore')
+    ohe.fit(trn_cats)
+    trn_ohe = pd.DataFrame(ohe.transform(trn_cats).toarray(), 
+                            columns = ohe.get_feature_names(), index=trn_cats.index)
+    tst_ohe = pd.DataFrame(ohe.transform(tst_cats).toarray(), 
+                            columns = ohe.get_feature_names(), index = tst_cats.index)
+    return trn_ohe, tst_ohe
+
+def lower_features(train_df, test_df, n):
     for col in ['wpt_name', 'subvillage', 'installer', 'ward', 'funder', 'lga']:
-        # get top 20 categories for the column
-        temp = train_df[col].value_counts().head(20).keys()
-        # if the value is not in the top 20, convert to 'Other'
+        temp = train_df[col].value_counts().head(n).keys()
         train_df[col] = train_df[col].apply(lambda x: 'Other' if x not in temp else x)
         test_df[col] = test_df[col].apply(lambda x: 'Other' if x not in temp else x)
+    cols = ['funder', 'installer', 'wpt_name', 'subvillage', 'lga', 'ward']
+    train_df[cols] = train_df[cols].astype('category')
+    test_df[cols] = test_df[cols].astype('category')
 
-
-df_final[['public_meeting', 'permit']] = df_final[['public_meeting', 'permit']].astype('boolean')
-df_final[['funder', 'installer', 'wpt_name', 'subvillage', 'lga', 'ward']] = df_final[
-    ['funder', 'installer', 'wpt_name', 'subvillage', 'lga', 'ward']].astype('category')
-
-test_df[['funder', 'installer', 'wpt_name', 'subvillage', 'lga', 'ward']] = test_df[
-    ['funder', 'installer', 'wpt_name', 'subvillage', 'lga', 'ward']].astype('category')
-
-cats = df_final.select_dtypes(include='category')
-nums = df_final.select_dtypes(exclude='category')
-
-cats_test = test_df.select_dtypes(include='category')
-nums_test = test_df.select_dtypes(exclude='category')
-
-ohe = OneHotEncoder(handle_unknown='ignore')
-# Fit categories to training data
-ohe.fit(cats)
-
-train_ohe = pd.DataFrame(ohe.transform(cats).toarray(), columns = ohe.get_feature_names(), index=cats.index)
-test_ohe = pd.DataFrame(ohe.transform(cats_test).toarray(), columns = ohe.get_feature_names(), index = cats_test.index)
-
-df_final = nums.merge(train_ohe, left_index=True, right_index=True, how='inner')
-test_final = nums_test.merge(test_ohe, left_index=True, right_index=True, how='inner')
-
-
-def save_me(train_df, test_df, output):
+def save_cleaned_data(train_df, test_df):
     current_time = dt.datetime.now().strftime("%d%m%Y_%I%M%p")
+    train_df.to_pickle(output+'train_set_cleaned'+current_time+'.pkl')
+    test_df.to_pickle(output+'test_set_cleaned'+current_time+'.pkl')
+    print(f"Saved time: {current_time}")
 
-    train_df.to_pickle(output+'training_set_cleaned'+current_time+'.pkl')
-    test_df.to_pickle(output+'testing_set_cleaned'+current_time+'.pkl')
+dtype_dict = {'amount_tsh': 'float32',
+            'funder': 'category',
+            'gps_height': 'int16',
+            'installer': 'category',
+            'longitude': 'float16',
+            'latitude': 'float16',
+            'wpt_name': 'category',
+            'num_private': 'int16',
+            'basin': 'category',
+            'subvillage': 'category',
+            'region': 'category',
+            'region_code': 'int8',
+            'district_code': 'int8',
+            'lga': 'category',
+            'ward': 'category',
+            'population': 'int16',
+            'recorded_by': 'category',
+            'scheme_management': 'category',
+            'construction_year': 'int16',
+            'extraction_type': 'category',
+            'extraction_type_group': 'category',
+            'extraction_type_class': 'category',
+            'management': 'category',
+            'management_group': 'category',
+            'payment': 'category',
+            'payment_type': 'category',
+            'water_quality': 'category',
+            'quality_group': 'category',
+            'quantity': 'category',
+            'quantity_group': 'category',
+            'source': 'category',
+            'source_type': 'category',
+            'source_class': 'category',
+            'waterpoint_type': 'category',
+            'waterpoint_type_group': 'category'}
+
+def get_cleaned_sets(trn_df_path, trn_lbls_path, tst_df_path, sub_form_path, dtype_dict):
+    train_df = pd.read_csv(trn_df_path, dtype=dtype_dict)
+    train_lbls = pd.read_csv(trn_lbls_path, dtype=dtype_dict)
+    test_df = pd.read_csv(tst_df_path, dtype=dtype_dict)
+    sub_form = pd.read_csv(sub_form_path, dtype=dtype_dict)
+    simple_clean(train_df)
+    simple_clean(test_df)
+    add_categories(train_df)
+    add_categories(test_df)
+    fill_nulls(train_df)
+    fill_nulls(test_df)
+    lower_features(train_df, test_df, 25)
+    train_df, test_df = encode_me(train_df, test_df)
+    train_df = train_df.merge(train_lbls, left_index=True, right_on='id')
+    save_cleaned_data(train_df, test_df)
+    
+get_cleaned_sets(trn_df_path, trn_lbls_path, tst_df_path, sub_form_path, dtype_dict)
