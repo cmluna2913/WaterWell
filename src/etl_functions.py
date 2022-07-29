@@ -117,7 +117,7 @@ drop_list:
 {improve_format_lst(to_drop)}\n
 fill_dict:
 {improve_format_dct(fill_dict)}\n
-Grabbed top {n} features\n\n
+Grabbed top {n} features\n
 Categorical columns and associated categories:
 {improve_format_dct(cat_dict)}
 """
@@ -128,13 +128,13 @@ def improve_format_lst(my_list):
     temp = ""
     for l in my_list:
         temp+=f"\t{l},\n"
-    return temp[:-1]
+    return temp[:-2]
 
 def improve_format_dct(my_dict):
     temp = ""
     for k,v in my_dict.items():
         temp += f"\t{k}:{v},\n"
-    return temp[:-1]
+    return temp[:-2]
 
 def import_me(data_path, dtype_dict=None):
     if ".csv" in data_path:
