@@ -30,9 +30,17 @@ def simple_clean(train_df, test_df, to_drop):
     train_df.drop(columns=to_drop, inplace=True)
     test_df.drop(columns=to_drop, inplace=True)
 
+    # trn_data['date_recorded'] = pd.to_datetime(trn_data['date_recorded'])
+    # tst_data['date_recorded'] = pd.to_datetime(trn_data['date_recorded'])
+
+    # trn_data['month'] = trn_data['date_recorded'].dt.strftime('%m').astype(int)
+    # trn_data['year'] = trn_data['date_recorded'].dt.strftime('%y').astype(int)
+    # tst_data['month'] = tst_data['date_recorded'].dt.strftime('%m').astype(int)
+    # tst_data['year'] = tst_data['date_recorded'].dt.strftime('%y').astype(int)
+
 def fill_nulls(df, fill_dict):
     '''
-    Add fill value to columns with missing data if not included already.
+    Add fill value as a category to columns with missing data(if not yet included).
     Then, fill the df with the corresponding fill value from the fill dictionary.
     '''
     for col in ['funder', 'installer', 'subvillage', 'scheme_management', 'scheme_name']:
@@ -44,8 +52,10 @@ def fill_nulls(df, fill_dict):
 
 def transform_data(train_df, test_df, n=20):
     '''
-    Separates categorical columns and one hot encode columns.
-    Return concatenation of numerical columns and encoded columns.
+    Separates categorical columns and numerical columns.
+    Then it limits the total categories in each categorical column to at most n+1.
+    Then the re-categorized categorical columns are one-hot encoded.
+    Returns concatenation of numerical columns and encoded columns.
     '''
     trn_cats = train_df.select_dtypes(include='category')
     tst_cats = test_df.select_dtypes(include='category')
@@ -63,8 +73,7 @@ def transform_data(train_df, test_df, n=20):
 def ohe_me(trn_cats, tst_cats):
     '''
     One hot encode columns in both training and testing set. 
-    Both are done at the same time to ensure handling of unknown 
-    categorical values.
+    Both are done at the same time to ensure handling of unknown categorical values.
     '''
     ohe = OneHotEncoder(handle_unknown='ignore')
     ohe.fit(trn_cats)
@@ -76,7 +85,7 @@ def ohe_me(trn_cats, tst_cats):
 
 def lower_features(trn_cats, tst_cats, n):
     '''
-    Lower categories in columns to the specified number of categories (default=20).
+    Limit categories in columns to at most n+1 categories.
     For the specified columns, it will take the top n categories and re-categorize
     remaining categories to the specified value.
     This step is done to reduce dimensionality.
@@ -109,6 +118,11 @@ def save_cleaned_data(train_df, test_df, current_time, temp_output):
     test_df.to_pickle(temp_output+'test_data.pkl')
 
 def make_notes(current_time, temp_output, dtype_dict, to_drop, fill_dict, n, cat_dict):
+    '''
+    Generates an experiment_notes.txt file. Includes date and time, output path,
+    dtype_dict, drop_list, fill_dict, n, and categorical columns with associated
+    categories. Saves to the same output as the cleaned datasets.
+    '''
     notes = f"""Associated date and time: {current_time}
 Files saved to {temp_output}\n\n
 dtype_dict:
